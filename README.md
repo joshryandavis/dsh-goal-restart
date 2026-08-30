@@ -43,30 +43,10 @@ click anything.
 ## Install
 
 ```sh
-# once published on npm:
-npm i dsh-goal-restart
-
-# or from a checkout:
-dsh plugin --profile <profile> add /path/to/dsh-goal-restart
+dsh plugin --profile <profile> add dsh-goal-restart
 ```
 
-Then add the bundle to the profile manifest
-(`$DSH_HOME/profiles/<profile>/package.json`):
-
-```json
-{
-  "dependencies": { "dsh-goal-restart": "file:/path/to/dsh-goal-restart" },
-  "dsh": { "profile": { "bundles": [ "...", "dsh-goal-restart" ] } }
-}
-```
-
-Install and verify, then restart the service so the new bundle is loaded:
-
-```sh
-dsh plugin --profile web install
-dsh web --dump-config | grep -A2 goal-restart   # verify without booting
-launchctl kickstart -k gui/$(id -u)/com.dsh.web # or however you restart dsh
-```
+Then restart the dsh service so the new bundle is loaded.
 
 ## Disable
 

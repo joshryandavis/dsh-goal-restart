@@ -39,29 +39,10 @@ dsh 目标的**持久化状态**（objective、phase、revision、`roundsStarted
 ## 安装
 
 ```sh
-# 发布到 npm 之后：
-npm i dsh-goal-restart
-
-# 或者从本地目录安装：
-dsh plugin --profile <profile> add /path/to/dsh-goal-restart
+dsh plugin --profile <profile> add dsh-goal-restart
 ```
 
-然后在 profile 清单（`$DSH_HOME/profiles/<profile>/package.json`）中加入该 bundle：
-
-```json
-{
-  "dependencies": { "dsh-goal-restart": "file:/path/to/dsh-goal-restart" },
-  "dsh": { "profile": { "bundles": [ "...", "dsh-goal-restart" ] } }
-}
-```
-
-安装并验证，然后重启服务以加载新 bundle：
-
-```sh
-dsh plugin --profile web install
-dsh web --dump-config | grep -A2 goal-restart   # 不启动服务即可验证
-launchctl kickstart -k gui/$(id -u)/com.dsh.web # 或任何你重启 dsh 的方式
-```
+然后重启 dsh 服务以加载新的 bundle。
 
 ## 禁用
 
