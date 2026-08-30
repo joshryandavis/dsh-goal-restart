@@ -1,0 +1,46 @@
+{
+  "name": "dsh-goal-restart",
+  "version": "0.1.0",
+  "description": "Automatically re-arm active goals when the dsh service (re)starts, so the goal-round driver resumes rounds without human intervention.",
+  "type": "module",
+  "main": "./src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src/",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "CONTRACT.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "check": "node --check src/index.mjs",
+    "test": "node test/index.test.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "plugin",
+    "goal",
+    "restart",
+    "resume",
+    "autonomous",
+    "self-healing"
+  ],
+  "license": "MIT"
+}

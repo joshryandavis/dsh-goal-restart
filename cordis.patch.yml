@@ -1,0 +1,11 @@
+# dsh-goal-restart — re-arm active goals across dsh service restarts.
+# A native dsh bundle: inserting this row mounts the goal-restart plugin in any
+# profile that lists the bundle. The plugin re-arms durable 'active' goals the
+# moment their session is rehydrated from persistence (source === 'resume'),
+# letting the existing goal-round-driver continue automatically. Disable with
+# an id-targeted override if you prefer human-authorized resume only:
+#   - id: goal-restart
+#     disabled: true
+- insert:
+    - id: goal-restart
+      name: 'dsh-goal-restart'
