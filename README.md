@@ -15,13 +15,13 @@ resumes rounds without human intervention.
 A dsh goal's **durable state** (objective, phase, revision, `roundsStarted`)
 lives in the session log and survives restarts. Its **activation** ("armed")
 is deliberately process-local: it is never persisted, and every
-`agent/session-start` edge disarms it. So after the dsh service restarts, an
+`agent/created` edge disarms it. So after the dsh service restarts, an
 in-flight goal is replayed as `active` but stays stopped until someone issues
 an explicit resume.
 
 ## What this plugin does
 
-On `agent/session-start` where `payload.source === 'resume'` (the session was
+On `agent/created` where `payload.source === 'resume'` (the session was
 just loaded from persistence), it calls `ctx.goals.resume(agent, ref)` for a
 durable-`active` goal that still has round budget. The stock
 `goal-round-driver` (mounted by `dsh-base`) then reserves and queues the next

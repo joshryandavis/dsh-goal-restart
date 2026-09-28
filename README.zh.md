@@ -12,13 +12,13 @@
 
 dsh 目标的**持久化状态**（objective、phase、revision、`roundsStarted`）保存在
 会话日志中，可以跨重启存活。但它的**激活状态**（"armed"）刻意做成进程本地：
-它从不持久化，而且每次 `agent/session-start` 边界都会解除武装（disarm）。
+它从不持久化，而且每次 `agent/created` 边界都会解除武装（disarm）。
 因此，当 dsh 服务重启后，进行中的目标会被回放为 `active`，但会一直停住，
 直到有人显式恢复（resume）。
 
 ## 这个插件做什么
 
-在 `agent/session-start` 且 `payload.source === 'resume'`（会话刚从持久化
+在 `agent/created` 且 `payload.source === 'resume'`（会话刚从持久化
 存储重新加载）时，只要目标处于持久化的 `active` 状态且还有轮次预算，就调用
 `ctx.goals.resume(agent, ref)`。随后内置的 `goal-round-driver`（由
 `dsh-base` 挂载）会像普通的人类恢复那样预留并投递下一轮——只是这次不需要

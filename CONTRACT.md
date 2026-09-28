@@ -3,7 +3,7 @@
 ## Invariants (non-negotiable)
 
 1. **Only persisted rehydration arms.** A goal is re-armed only when
-   `agent/session-start` carries `source: 'resume'`. `startup` (fresh
+   `agent/created` carries `source: 'resume'`. `startup` (fresh
    session, fork, subagent) never arms.
 2. **Durable phase wins.** Only `phase: 'active'` goals are re-armed;
    paused/blocked/complete goals are never touched.

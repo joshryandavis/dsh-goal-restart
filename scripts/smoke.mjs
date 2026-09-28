@@ -50,7 +50,7 @@ console.log('  process 2: session rehydrated from persistence — activation cam
 console.log('')
 
 apply(ctx)
-ctx.emit('agent/session-start', { agent: session, source: 'resume' })
+ctx.emit('agent/created', { agent: session, source: 'resume' })
 
 const rearmed = goals.get(session)
 console.log(`  after resume  : ${rearmed.phase} / ${rearmed.activation} (revision ${rearmed.revision})`,
