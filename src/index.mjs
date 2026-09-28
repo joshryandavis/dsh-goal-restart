@@ -7,7 +7,7 @@
  * (objective, phase, revision, roundsStarted) lives in the session log and
  * survives restarts - but its ability to continue automatically (the
  * process-local 'armed' activation) deliberately does not. Every
- * 'agent/session-start' edge disarms activation, and a fresh process starts
+ * 'agent/created' edge disarms activation, and a fresh process starts
  * with everything disarmed. So when the dsh service goes down and comes back
  * (crash, launchd respawn, the classic 'the agent was fiddling with its own
  * plugins and restarted the service' case), a goal that was actively being
@@ -23,7 +23,7 @@
  *
  * Why it is safe
  * --------------
- * - 'agent/session-start' carries source: 'resume' | 'startup' | 'clear' |
+ * - 'agent/created' carries source: 'resume' | 'startup' | 'clear' |
  *   'compact'. Only 'resume' (a session loaded from persistence) arms.
  *   Fresh sessions, forks, and subagents publish as 'startup' and are
  *   skipped, so a fork never silently hijacks the parent's goal.
@@ -86,21 +86,21 @@ export function maybeRearm(agent, goals, log = () => {}) {
 
 /**
  * Install the automatic restart policy into a Cordis context.
- * 1. On 'agent/session-start' with source === 'resume' (the session was just
+ * 1. On 'agent/created' with source === 'resume' (the session was just
  *    loaded from persistence - i.e. the service restarted), re-arm the active
- *    goal. The goal service's own session-start listener (constructed before
+ *    goal. The goal service's own agent/created listener (constructed before
  *    this plugin mounts, since we inject 'goals') has already disarmed
  *    activation, so resume() arms cleanly and emits goal/changed, which the
  *    stock round driver observes.
  * 2. Defensive sweep over agents already live at mount time (plugin
- *    hot-reload while sessions are open never re-fires session-start).
+ *    hot-reload while sessions are open never re-fires agent/created).
  */
 export function apply(ctx) {
   const log = (message, level = 'info') => {
     ctx.logger?.[level]?.(`goal-restart: ${message}`)
   }
 
-  ctx.on('agent/session-start', ({ agent, source }) => {
+  ctx.on('agent/created', ({ agent, source }) => {
     if (source !== 'resume') return
     maybeRearm(agent, ctx.goals, log)
   })

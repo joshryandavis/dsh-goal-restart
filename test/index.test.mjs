@@ -125,24 +125,24 @@ function fakeCtx(agents, goals) {
   }
 }
 
-case_('re-arms on session-start with source resume', () => {
+case_('re-arms on agent/created with source resume', () => {
   const goals = fakeGoals({ goal: activeGoal() })
   const a = agent('sess-1')
   const ctx = fakeCtx([a], goals)
   apply(ctx)
-  ctx.emit('agent/session-start', { agent: a, source: 'resume' })
+  ctx.emit('agent/created', { agent: a, source: 'resume' })
   assert.deepEqual(goals.calls.resume, [{ id: 'goal-1', revision: 3 }])
   assert.ok(ctx.logs.some(([lvl, m]) => lvl === 'info' && m.includes('re-armed')))
 })
 
-case_('does not re-arm on session-start with source startup', () => {
+case_('does not re-arm on agent/created with source startup', () => {
   // At real boot no agent exists yet at apply() time, so only the
-  // session-start edge can arm — and a startup edge must not.
+  // agent/created edge can arm — and a startup edge must not.
   const goals = fakeGoals({ goal: activeGoal() })
   const a = agent('sess-fresh')
   const ctx = fakeCtx([], goals)
   apply(ctx)
-  ctx.emit('agent/session-start', { agent: a, source: 'startup' })
+  ctx.emit('agent/created', { agent: a, source: 'startup' })
   assert.deepEqual(goals.calls.resume, [])
   assert.equal(goals.calls.get, 0)
 })
